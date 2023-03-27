@@ -1,0 +1,50 @@
+Question 1 - Top 10 Most Sold Tracks according to Titles(showing Genres)?
+
+SELECT al.Title, g.Name as GenreType, count(tr.TrackId) as Total_Times_Purchased
+FROM Album al
+JOIN Track tr
+ON al.AlbumId = tr.AlbumId
+JOIN Genre g
+ON tr.GenreId = g.GenreId
+GROUP BY 1
+ORDER By Total_Times_Purchased DESC
+LIMIT 10
+
+
+Question 2 - Top 5 Purchasers on the Music Store?
+
+  SELECT c.FirstName || c.LastName AS Customer_Name,
+  SUM(il.UnitPrice) AS Total_Paid
+  FROM Customer c
+  JOIN Invoice i 
+  ON c.CustomerId = i.CustomerId
+  JOIN InvoiceLine il 
+  ON i.InvoiceId = il.InvoiceId
+  GROUP BY 1
+  ORDER BY 2 DESC
+  LIMIT 5
+
+Note: I get the concat from this website
+https://www.sqlitetutorial.net/sqlite-string-functions/sqlite-concat/
+
+
+Question 3 - Number of Tracks Sold according to Genre type?
+
+SELECT gr.Name, count(tr.TrackId) AS Tracks_Purchased
+FROM Genre gr
+JOIN Track tr
+ON gr.genreid = tr.genreid
+JOIN InvoiceLine il
+ON tr.trackid = il.trackid
+GROUP BY gr.Name
+ORDER BY Tracks_Purchased DESC;
+
+
+Question 4 - Total Sales in Years only?
+
+SELECT STRFTIME('%Y', i.InvoiceDate) as Year , SUM(il.UnitPrice)
+FROM Invoice i
+JOIN InvoiceLine il
+ON i.InvoiceId = il.InvoiceId
+GROUP BY Year
+ORDER BY 2 DESC
